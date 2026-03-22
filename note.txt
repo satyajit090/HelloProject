@@ -1,0 +1,52 @@
+COMMANDS FOR THIS PROJECT:
+
+Step:1
+--------
+docker build -t spring-boot-ci-demo:latest . -create a docker image via local terminal with corresponded Project path
+docker run -d -p 8080:8080 spring-boot-ci-demo:latest - run the docker image in local machine
+
+Step:2
+--------
+docker login - it will connect remote docker hub web account
+docker tag spring-boot-ci-demo:latest satyajit090/spring-boot-ci-demo:latest - tagged the image so that it will ready to push under satyajit090 repository
+docker push satyajit090/spring-boot-ci-demo:latest - pushed to remote docker hub repository
+
+Step:3
+--------
+ssh -i demo-keypair.pem ec2-user@public-ip(EC2 instance)- to connect ec2 instance via local terminal
+yes - confirmed to continue  to connect remote aws ec2 server
+sudo yum update -y - update the ec2 instance
+sudo yum install docker -y - install docker
+docker --version - check docker version
+sudo systemctl start docker - start the docker app via terminal
+sudo systemctl enable docker - if ec2 instance will reboot but docker will start automatically
+sudo usermod -aG docker ec2-user - taking current user and adding to docker security group so that when running docker related command we dont use of "sudo"
+
+exit - so that all the action will reflected
+ssh -i demo-keypair.pem ec2-user@public-ip(EC2 instance)
+docker ps - to check current running docker container status
+docker pull satyajit090/spring-boot-ci-demo:latest -  pulled from remote docker hub repository to AWS ec2 instance
+docker images - showing the downloaded docker image
+docker run -d -p 8080:8080 --platform  satyajit090/spring-boot-ci-demo - run the docker image
+docker ps -check docker running status
+
+if not run
+----------------------------------------------
+local machine:                               |
+----------------------------------------------
+docker buildx build \                        |
+  --platform linux/amd64 \                   |
+  -t satyajit090/spring-boot-ci-demo \       |
+  --push .                                   |
+----------------------------------------------
+
+docker rm 7220a834ffc8 6bc7e974c256
+docker rmi satyajit090/spring-boot-ci-demo - remove broken image
+
+docker pull satyajit090/spring-boot-ci-demo - pulled from remote docker hub repository to AWS ec2 instance
+docker run -d -p 8080:8080 satyajit090/spring-boot-ci-demo
+docker ps
+
+
+
+
